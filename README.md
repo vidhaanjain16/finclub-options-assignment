@@ -14,11 +14,20 @@ Logic: draw smooth polynomial curves between known data points.
 Result: An MSE of about 0.000469
 
 ### 3. Stochastic Volatility Inspired (SVI) Model
-logic: fit the 5 SVI parameters to each 5-minute timestamp using non-linear least squares optimization.
-result: MSE of around 0.0003
+logic: fit the 5 SVI parameters to each 5-minute timestamp. It treats a specific time to expiration(T) as a snapshot, fitting a curve directly to market data.
+      It follows this equation :  w(k) = a + b(rho(k-m) + sqrt{(k-m)^2 + s^2})  ; where--
+      1. w(k) is implied variance, and IV = sqrt(w/T), T is tte.
+      2. k is the log moneyness, calculated as k = ln(strike price/ underlying price)
+      3. a is the vertical shift
+      4. b is the steepness
+      5. rho is the tilt of the smile(-1 to 1)
+      6. m controls the horizontal shift( ie from at the money , ie from k=0)
+      7. s controls the curvature at the bottom of the smile
+      If the svi fails to find a mathematical solution, it falls back to cubic interpolation. 
+result: MSE of around 0.0003, an improvement over interpolatrion
 
 ### 4. Matrix Factorization (Sklearn Iterative Imputer)
-logic ;Using sklearn's iterative imputer , treats the entire volatility dataset as a single matrix.
+logic ;Using sklearn's iterative imputer , treats the entire volatility dataset as a single matrix. It runs regression using neighbour strike's values to fill a  missing value at a particular strike. First fill all the empty cells with some random guess,then run regression using neighbor values. it stops when the number of iterations reach 50, or if any iteration gives results very close to the previous one.
 result: gave best MSE of about 0.0001033
 
 ### 5. The Final Submission: 50/50 Ensemble
