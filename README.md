@@ -1,4 +1,4 @@
-# finclub options assignment
+# Implied Volatility Surface Estimation
 
 This repository contains my solution for finding missing Volatility surface points in Nifty 50 options. The primary goal was to reconstruct the volatility surface across time and strike dimensions while minimizing the Mean Squared Error (MSE).
 
